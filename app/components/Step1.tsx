@@ -37,7 +37,7 @@ export function Step1() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Split Payment</h1>
+        <h1 className="text-2xl font-bold text-gray-900">JustSplit</h1>
         <button
           onClick={() => setShowHistory(true)}
           className="text-blue-600 hover:underline text-sm"
@@ -45,6 +45,7 @@ export function Step1() {
           View History
         </button>
       </div>
+      <p className="text-gray-600 text-sm">A simple and easy to use UPI payment split tool</p>
       
       <div>
         <label className="block mb-2 text-gray-900">Amount (₹)</label>

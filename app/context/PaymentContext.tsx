@@ -69,7 +69,10 @@ export function PaymentProvider({ children }: { children: ReactNode }) {
       const existing = localStorage.getItem('transactions');
       const transactions: Transaction[] = existing ? JSON.parse(existing) : [];
       transactions.unshift(transaction);
-      localStorage.setItem('transactions', JSON.stringify(transactions));
+      
+      // Keep only the most recent 20 transactions
+      const limitedTransactions = transactions.slice(0, 20);
+      localStorage.setItem('transactions', JSON.stringify(limitedTransactions));
     }
   };
 

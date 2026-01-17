@@ -24,6 +24,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="light">
+      <head>
+        <title>JustSplit</title>
+        <meta name="description" content="Just Split is a simple and easy to use UPI payment split tool. It helps you split payments with your friends and family." />
+        <meta name="keywords" content="UPI, payment, split, friends, family" />
+        <meta name="author" content="Shubham242000" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        {/* <link rel="icon" href="/favicon.ico" /> */}
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white text-gray-900`}
       >

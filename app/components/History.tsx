@@ -61,16 +61,33 @@ upi://pay?pa=${txn.upiId}&am=${personShare.toFixed(2)}&tn=${txn.topic}
     window.open(`https://wa.me/?text=${encodedMessage}`, '_blank');
   };
 
+  const clearHistory = () => {
+    if (confirm('Are you sure you want to clear all transaction history? This cannot be undone.')) {
+      localStorage.removeItem('transactions');
+      setTransactions([]);
+    }
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-gray-900">Transaction History</h1>
-        <button
-          onClick={handleNewSplit}
-          className="bg-blue-600 text-white rounded px-4 py-2 hover:bg-blue-700"
-        >
-          New Split
-        </button>
+        <div className="flex gap-2">
+          {transactions.length > 0 && (
+            <button
+              onClick={clearHistory}
+              className="bg-red-600 text-white rounded px-4 py-2 hover:bg-red-700 text-sm"
+            >
+              Clear History
+            </button>
+          )}
+          <button
+            onClick={handleNewSplit}
+            className="bg-blue-600 text-white rounded px-4 py-2 hover:bg-blue-700"
+          >
+            New Split
+          </button>
+        </div>
       </div>
 
       {transactions.length === 0 ? (
