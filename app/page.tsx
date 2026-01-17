@@ -54,7 +54,9 @@ export default function Home() {
 Your share is ₹${perPersonAmount.toFixed(2)}.
 
 Pay here:
-upi://pay?pa=${upiId}&am=${perPersonAmount.toFixed(2)}&tn=${topicText}`;
+https://upi.link/pay?pa=${upiId}@ptaxis&am=${perPersonAmount.toFixed(2)}&tn=${topicText}`;
+
+// https://upi.link/pay?pa=9425609498@ptaxis&am=400&tn=expenses
     
     setMessage(msg);
     setStep(3);
