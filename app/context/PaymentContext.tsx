@@ -7,6 +7,16 @@ type Step = 1 | 2 | 3;
 export interface Person {
   name: string;
   share: number;
+  paid: boolean;
+}
+
+export interface Transaction {
+  id: string;
+  date: string;
+  amount: string;
+  topic: string;
+  upiId: string;
+  people: Person[];
 }
 
 interface PaymentContextType {
@@ -22,6 +32,11 @@ interface PaymentContextType {
   setUpiId: (upiId: string) => void;
   people: Person[];
   setPeople: (people: Person[]) => void;
+  showHistory: boolean;
+  setShowHistory: (show: boolean) => void;
+  saveTransaction: () => void;
+  getTransactions: () => Transaction[];
+  resetForm: () => void;
 }
 
 const PaymentContext = createContext<PaymentContextType | undefined>(undefined);
@@ -38,6 +53,41 @@ export function PaymentProvider({ children }: { children: ReactNode }) {
     return '';
   });
   const [people, setPeople] = useState<Person[]>([]);
+  const [showHistory, setShowHistory] = useState(false);
+
+  const saveTransaction = () => {
+    if (typeof window !== 'undefined') {
+      const transaction: Transaction = {
+        id: Date.now().toString(),
+        date: new Date().toISOString(),
+        amount,
+        topic: topic || 'expenses',
+        upiId,
+        people: [...people],
+      };
+
+      const existing = localStorage.getItem('transactions');
+      const transactions: Transaction[] = existing ? JSON.parse(existing) : [];
+      transactions.unshift(transaction);
+      localStorage.setItem('transactions', JSON.stringify(transactions));
+    }
+  };
+
+  const getTransactions = (): Transaction[] => {
+    if (typeof window !== 'undefined') {
+      const existing = localStorage.getItem('transactions');
+      return existing ? JSON.parse(existing) : [];
+    }
+    return [];
+  };
+
+  const resetForm = () => {
+    setStep(1);
+    setAmount('');
+    setTopic('');
+    setNumberOfPeople('');
+    setPeople([]);
+  };
 
   return (
     <PaymentContext.Provider
@@ -54,6 +104,11 @@ export function PaymentProvider({ children }: { children: ReactNode }) {
         setUpiId,
         people,
         setPeople,
+        showHistory,
+        setShowHistory,
+        saveTransaction,
+        getTransactions,
+        resetForm,
       }}
     >
       {children}

@@ -23,8 +23,10 @@ export function Step2() {
   };
   
   const totalShares = people.reduce((sum, person) => sum + person.share, 0);
+   
   const amountNum = parseFloat(amount);
-  const isBalanced = Math.abs(totalShares - amountNum) < 0.01;
+   
+  const isBalanced = Math.abs(totalShares - amountNum + people[0].share) < 0.01;
   
   const handleNext = () => {
     if (!upiId || !isValidUpi) {

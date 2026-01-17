@@ -3,7 +3,7 @@
 import { usePayment } from '../context/PaymentContext';
 
 export function Step1() {
-  const { amount, setAmount, topic, setTopic, numberOfPeople, setNumberOfPeople, setStep, setPeople } = usePayment();
+  const { amount, setAmount, topic, setTopic, numberOfPeople, setNumberOfPeople, setStep, setPeople, setShowHistory } = usePayment();
   
   const handleNext = () => {
     const amt = parseFloat(amount);
@@ -19,12 +19,15 @@ export function Step1() {
       return;
     }
     
+    // Only n-1 people need to pay (excluding the person who paid)
+    const numPeopleToPay = numPeople - 1;
     const perPerson = amt / numPeople;
     
-    // Initialize people array with equal shares
-    const initialPeople = Array.from({ length: numPeople }, (_, i) => ({
+    // Initialize people array with equal shares (excluding the payer)
+    const initialPeople = Array.from({ length: numPeopleToPay }, (_, i) => ({
       name: '',
       share: perPerson,
+      paid: false,
     }));
     
     setPeople(initialPeople);
@@ -33,7 +36,15 @@ export function Step1() {
   
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-bold mb-6 text-gray-900">Split Payment</h1>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold text-gray-900">Split Payment</h1>
+        <button
+          onClick={() => setShowHistory(true)}
+          className="text-blue-600 hover:underline text-sm"
+        >
+          View History
+        </button>
+      </div>
       
       <div>
         <label className="block mb-2 text-gray-900">Amount (₹)</label>
@@ -60,16 +71,17 @@ export function Step1() {
       </div>
       
       <div>
-        <label className="block mb-2 text-gray-900">Number of People</label>
+        <label className="block mb-2 text-gray-900">Number of People (including you)</label>
         <input
           type="number"
           value={numberOfPeople}
           onChange={(e) => setNumberOfPeople(e.target.value)}
           min="2"
           className="w-full border border-gray-300 rounded p-2 bg-white text-gray-900"
-          placeholder="Enter number of people"
+          placeholder="Total people including you"
           required
         />
+        <p className="text-xs text-gray-500 mt-1">You&apos;ll enter details for {numberOfPeople && parseInt(numberOfPeople) > 1 ? parseInt(numberOfPeople) - 1 : 'other'} {numberOfPeople && parseInt(numberOfPeople) === 2 ? 'person' : 'people'} who need to pay</p>
       </div>
       
       <button
