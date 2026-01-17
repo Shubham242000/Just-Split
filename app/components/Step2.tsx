@@ -1,22 +1,51 @@
+'use client';
+
+import { usePayment } from '../context/PaymentContext';
+
 const UPI_REGEX = /^[\w.-]+@[\w.-]+$/;
 
-export function Step2({
-  amount,
-  numberOfPeople,
-  perPersonAmount,
-  upiId,
-  setUpiId,
-  onGenerate,
-}: {
-  amount: string;
-  numberOfPeople: string;
-  perPersonAmount: number;
-  upiId: string;
-  setUpiId: (v: string) => void;
-  onGenerate: () => void;
-}) {
+export function Step2() {
+  const { amount, people, setPeople, upiId, setUpiId, setStep } = usePayment();
+  
   const isValidUpi = upiId.length > 0 && UPI_REGEX.test(upiId);
   const showValidation = upiId.length > 0;
+  
+  const updatePersonName = (index: number, name: string) => {
+    const updated = [...people];
+    updated[index].name = name;
+    setPeople(updated);
+  };
+  
+  const updatePersonShare = (index: number, share: string) => {
+    const updated = [...people];
+    updated[index].share = parseFloat(share) || 0;
+    setPeople(updated);
+  };
+  
+  const totalShares = people.reduce((sum, person) => sum + person.share, 0);
+  const amountNum = parseFloat(amount);
+  const isBalanced = Math.abs(totalShares - amountNum) < 0.01;
+  
+  const handleNext = () => {
+    if (!upiId || !isValidUpi) {
+      alert('Please enter a valid UPI ID');
+      return;
+    }
+    
+    if (!isBalanced) {
+      alert('Total shares must equal the total amount');
+      return;
+    }
+    
+    const hasEmptyNames = people.some(p => !p.name.trim());
+    if (hasEmptyNames) {
+      alert('Please enter names for all people');
+      return;
+    }
+    
+    localStorage.setItem('upiId', upiId);
+    setStep(3);
+  };
   
   return (
     <div className="space-y-4">
@@ -24,8 +53,39 @@ export function Step2({
       
       <div className="bg-gray-100 p-4 rounded space-y-2 text-gray-900">
         <p><strong>Total Amount:</strong> ₹{amount}</p>
-        <p><strong>Number of People:</strong> {numberOfPeople}</p>
-        <p><strong>Per Person:</strong> ₹{perPersonAmount.toFixed(2)}</p>
+        <p><strong>Total Shares:</strong> ₹{totalShares.toFixed(2)} {!isBalanced && <span className="text-red-600">(Must equal ₹{amount})</span>}</p>
+      </div>
+      
+      <div className="space-y-3">
+        <h2 className="font-bold text-gray-900">People & Their Shares</h2>
+        {people.map((person, index) => (
+          <div key={index} className="border border-gray-300 rounded p-3 space-y-2 bg-white">
+            <div>
+              <label className="block text-sm mb-1 text-gray-700">Person {index + 1} Name</label>
+              <input
+                type="text"
+                value={person.name}
+                onChange={(e) => updatePersonName(index, e.target.value)}
+                className="w-full border border-gray-300 rounded p-2 bg-white text-gray-900"
+                placeholder="Enter name"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm mb-1 text-gray-700">Share Amount (₹)</label>
+              <input
+                type="number"
+                value={person.share}
+                onChange={(e) => updatePersonShare(index, e.target.value)}
+                step="0.01"
+                min="0"
+                className="w-full border border-gray-300 rounded p-2 bg-white text-gray-900"
+                placeholder="Enter share"
+                required
+              />
+            </div>
+          </div>
+        ))}
       </div>
       
       <div>
@@ -59,10 +119,10 @@ export function Step2({
       </div>
       
       <button
-        onClick={onGenerate}
+        onClick={handleNext}
         className="w-full bg-blue-600 text-white rounded p-3 mt-4 hover:bg-blue-700"
       >
-        Generate WhatsApp Message
+        Next
       </button>
     </div>
   );

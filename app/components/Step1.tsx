@@ -1,20 +1,36 @@
-export function Step1({
-  amount,
-  setAmount,
-  topic,
-  setTopic,
-  numberOfPeople,
-  setNumberOfPeople,
-  onNext,
-}: {
-  amount: string;
-  setAmount: (v: string) => void;
-  topic: string;
-  setTopic: (v: string) => void;
-  numberOfPeople: string;
-  setNumberOfPeople: (v: string) => void;
-  onNext: () => void;
-}) {
+'use client';
+
+import { usePayment } from '../context/PaymentContext';
+
+export function Step1() {
+  const { amount, setAmount, topic, setTopic, numberOfPeople, setNumberOfPeople, setStep, setPeople } = usePayment();
+  
+  const handleNext = () => {
+    const amt = parseFloat(amount);
+    const numPeople = parseInt(numberOfPeople);
+    
+    if (!amount || amt < 1) {
+      alert('Please enter an amount of at least 1');
+      return;
+    }
+    
+    if (!numberOfPeople || numPeople < 2) {
+      alert('Number of people must be at least 2');
+      return;
+    }
+    
+    const perPerson = amt / numPeople;
+    
+    // Initialize people array with equal shares
+    const initialPeople = Array.from({ length: numPeople }, (_, i) => ({
+      name: '',
+      share: perPerson,
+    }));
+    
+    setPeople(initialPeople);
+    setStep(2);
+  };
+  
   return (
     <div className="space-y-4">
       <h1 className="text-2xl font-bold mb-6 text-gray-900">Split Payment</h1>
@@ -57,7 +73,7 @@ export function Step1({
       </div>
       
       <button
-        onClick={onNext}
+        onClick={handleNext}
         className="w-full bg-blue-600 text-white rounded p-3 mt-4 hover:bg-blue-700"
       >
         Next
