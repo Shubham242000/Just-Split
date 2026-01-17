@@ -9,15 +9,15 @@ export function Step3({
 }) {
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-bold mb-6">Share Message</h1>
+      <h1 className="text-2xl font-bold mb-6 text-gray-900">Share Message</h1>
       
       <div>
-        <label className="block mb-2">Message (editable)</label>
+        <label className="block mb-2 text-gray-900">Message (editable)</label>
         <textarea
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           rows={8}
-          className="w-full border border-gray-300 rounded p-2 font-mono text-sm"
+          className="w-full border border-gray-300 rounded p-2 font-mono text-sm bg-white text-gray-900"
         />
       </div>
       

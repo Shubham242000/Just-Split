@@ -15,21 +15,21 @@ export function Step2({
 }) {
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-bold mb-6">Payment Details</h1>
+      <h1 className="text-2xl font-bold mb-6 text-gray-900">Payment Details</h1>
       
-      <div className="bg-gray-100 p-4 rounded space-y-2">
+      <div className="bg-gray-100 p-4 rounded space-y-2 text-gray-900">
         <p><strong>Total Amount:</strong> ₹{amount}</p>
         <p><strong>Number of People:</strong> {numberOfPeople}</p>
         <p><strong>Per Person:</strong> ₹{perPersonAmount.toFixed(2)}</p>
       </div>
       
       <div>
-        <label className="block mb-2">Your UPI ID</label>
+        <label className="block mb-2 text-gray-900">Your UPI ID</label>
         <input
           type="text"
           value={upiId}
           onChange={(e) => setUpiId(e.target.value)}
-          className="w-full border border-gray-300 rounded p-2"
+          className="w-full border border-gray-300 rounded p-2 bg-white text-gray-900"
           placeholder="yourname@upi"
           required
         />
