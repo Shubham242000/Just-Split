@@ -1,6 +1,7 @@
 'use client';
 
 import { usePayment } from '../context/PaymentContext';
+import Image from 'next/image';
 
 export function Step1() {
   const { amount, setAmount, topic, setTopic, numberOfPeople, setNumberOfPeople, setStep, setPeople, setShowHistory } = usePayment();
@@ -24,7 +25,7 @@ export function Step1() {
     const perPerson = amt / numPeople;
     
     // Initialize people array with equal shares (excluding the payer)
-    const initialPeople = Array.from({ length: numPeopleToPay }, (_, i) => ({
+    const initialPeople = Array.from({ length: numPeopleToPay }, () => ({
       name: '',
       share: perPerson,
       paid: false,
@@ -36,8 +37,18 @@ export function Step1() {
   
   return (
     <div className="space-y-4">
+      <div className="flex items-center justify-center mb-6">
+        <Image 
+          src="/logo.png" 
+          alt="JustSplit Logo" 
+          width={120} 
+          height={120}
+          priority
+        />
+      </div>
+      
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">JustSplit</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Split Payment</h1>
         <button
           onClick={() => setShowHistory(true)}
           className="text-blue-600 hover:underline text-sm"
@@ -45,7 +56,6 @@ export function Step1() {
           View History
         </button>
       </div>
-      <p className="text-gray-600 text-sm">A simple and easy to use UPI payment split tool</p>
       
       <div>
         <label className="block mb-2 text-gray-900">Amount (₹)</label>

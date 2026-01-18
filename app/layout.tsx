@@ -17,9 +17,6 @@ export const metadata: Metadata = {
   description: "Just Split is a simple and easy to use UPI payment split tool. It helps you split payments with your friends and family.",
   keywords: ["UPI", "payment", "split", "friends", "family"],
   authors: [{ name: "Shubham242000" }],
-  icons: {
-    icon: '/favicon.svg',
-  },
 };
 
 export default function RootLayout({
