@@ -8,11 +8,14 @@ export function Step3() {
   
   const generateMessage = (personName: string, personShare: number) => {
     const topicText = topic || 'expenses';
+    const encodedTopic = encodeURIComponent(topicText);
+    const upiLink = `upi://pay?pa=${upiId}&am=${personShare.toFixed(2)}&cu=INR&tn=${encodedTopic}`;
+    
     return `Hey ${personName}! I paid ₹${amount} for ${topicText}.
 Your share is ₹${personShare.toFixed(2)}.
 
 Pay here:
-upi://pay?pa=${upiId}&am=${personShare.toFixed(2)}&tn=${topicText}
+${upiLink}
 
  via https://just-split-seven.vercel.app/
 `;

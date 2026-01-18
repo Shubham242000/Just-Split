@@ -49,11 +49,14 @@ export function History() {
   };
 
   const sendReminder = (personName: string, personShare: number, txn: Transaction) => {
+    const encodedTopic = encodeURIComponent(txn.topic);
+    const upiLink = `upi://pay?pa=${txn.upiId}&am=${personShare.toFixed(2)}&cu=INR&tn=${encodedTopic}`;
+    
     const message = `Hey ${personName}! Reminder: I paid ₹${txn.amount} for ${txn.topic}.
 Your share is ₹${personShare.toFixed(2)}.
 
 Pay here:
-upi://pay?pa=${txn.upiId}&am=${personShare.toFixed(2)}&tn=${txn.topic}
+${upiLink}
 
  via https://just-split-seven.vercel.app/
 `;
